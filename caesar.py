@@ -1,11 +1,12 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import filedialog
 from tkinter.ttk import Combobox
 import pyperclip
 
 root = Tk()
 root.title("CAESAR CIPHER")
-root.geometry("800x700")
+root.geometry("800x670")
 root.resizable(False, False)
 
 #Frame 1
@@ -150,6 +151,17 @@ def Copy_OUT():
     s = s[:len(s)-2]
     pyperclip.copy(s)
 
+def Save_As():
+    try:
+        s = str(TextAreaOUT.get("1.0", END))
+        save = filedialog.asksaveasfilename(defaultextension="*.txt", filetypes=(("text files","*.txt"),("all files","*.*")))
+        file=open(save, "w")
+        file.write(s)
+        file.close()
+    except:
+        messagebox.showinfo("INCOMPLETE ACTION", "File not saved!")
+
+
 
 ButtonClearOUT = Button(Frame4, text="CLEAR", relief=RIDGE, bd=5, command=Clear_OUT)
 ButtonClearOUT.grid(row=0, column=0, ipadx=30, ipady=10)
@@ -159,6 +171,14 @@ LabelSpace3.grid(row=0,column=1)
 
 ButtonCopyOUT = Button(Frame4, text="COPY", relief=RIDGE, bd=5, command=Copy_OUT)
 ButtonCopyOUT.grid(row=0, column=2, ipadx=30, ipady=10)
+
+LabelSpace4 = Label(Frame4, text=" ")
+LabelSpace4.grid(row=0,column=3)
+
+ButtonSaveAs = Button(Frame4, text="SAVE", relief=RIDGE, bd=5, command=Save_As)
+ButtonSaveAs.grid(row=0, column=4, ipadx=30, ipady=10)
+
+
 Frame4.pack()
 
 root.mainloop()
