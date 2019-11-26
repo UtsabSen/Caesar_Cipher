@@ -3,6 +3,11 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import Combobox
 import pyperclip
+from nltk.tokenize import TweetTokenizer
+file = open("words.txt")
+my_dict = list(file.read().lower().split('\n'))
+end_of_line = "\n________________________________________________________________________________________________\n"
+file.close()
 
 root = Tk()
 root.title("CAESAR CIPHER")
@@ -94,6 +99,38 @@ def Decoding():
     TextAreaOUT.config(state="disabled")
 
 
+def Brute_Force():
+    flag = 1
+    raw_text = str(TextAreaIN.get("1.0", END))
+    Clear_OUT()
+    try:
+        for my_key in range(1, 26):
+            new_text = ""
+            for i in raw_text:
+                if (ord(i) >= 97 and ord(i) <= 122):
+                    x = int(ord(i)) - my_key
+                    if (x < 97):
+                        x = x + 26
+                    new_text += chr(x)
+                elif (ord(i) >= 65 and ord(i) <= 90):
+                    x = int(ord(i)) - my_key
+                    if (x < 65):
+                        x = x + 26
+                    new_text += chr(x)
+                else:
+                    new_text += i
+            tokens = TweetTokenizer().tokenize(new_text.lower())
+            if (tokens[0] in my_dict and tokens[len(tokens) - 1] in my_dict):
+                flag = 0
+                TextAreaOUT.config(state="normal")
+                TextAreaOUT.insert("1.0", "Key: " + str(my_key) + "\nMessage: " + new_text + end_of_line)
+                TextAreaOUT.config(state="disabled")
+        if (flag):
+            messagebox.showinfo("STRONG ENCRYPTION", "Too strong to decrypt")
+    except:
+        messagebox.showinfo("INVALID INPUT", "Can not decrypt empty text")
+
+
 ButtonClearIN = Button(Frame2, text="CLEAR", relief=RIDGE, bd=5, command=Clear_IN)
 ButtonClearIN.grid(row=0, column=0, ipadx=30, ipady=10)
 
@@ -103,11 +140,17 @@ ButtonCopyIn.grid(row=0, column=2, ipadx=30, ipady=10)
 ButtonPasteIN = Button(Frame2, text="PASTE", relief=RIDGE, bd=5, command=Paste_IN)
 ButtonPasteIN.grid(row=0, column=4, ipadx=30, ipady=10)
 
+LabelSpaceF2R0C5 = Label(Frame2, text=" ")
+LabelSpaceF2R0C5.grid(row=0,column=5)
+
+ButtonBruteForce = Button(Frame2, text="BRUTE FORCE", relief=RIDGE, bd=5, command=Brute_Force)
+ButtonBruteForce.grid(row=0, column=6, ipadx=30, ipady=10)
+
 ButtonEncode = Button(Frame2, text="ENCODE", bg="White", relief=GROOVE, bd=5, command=Encoding)
 ButtonEncode.grid(row=1, column=0, ipadx=30, ipady=10)
 
-LabelSpace1 = Label(Frame2, text=" ")
-LabelSpace1.grid(row=1,column=1)
+LabelSpaceF2R1C1 = Label(Frame2, text=" ")
+LabelSpaceF2R1C1.grid(row=1,column=1)
 
 key = StringVar()
 DropDownKey = Combobox(Frame2, textvariable=key, justify='center', width=8, state="readonly",
@@ -116,8 +159,8 @@ DropDownKey.set("Enter Key")
 DropDownKey.config(font="BOLD 14")
 DropDownKey.grid(row=1, column=2, rowspan=2, ipady=10)
 
-LabelSpace2 = Label(Frame2, text=" ")
-LabelSpace2.grid(row=1,column=3)
+LabelSpaceF2R1C3 = Label(Frame2, text=" ")
+LabelSpaceF2R1C3.grid(row=1,column=3)
 
 ButtonDecode = Button(Frame2, text="DECODE", bg="White", relief=GROOVE, bd=5, command=Decoding)
 ButtonDecode.grid(row=1, column=4, ipadx=30, ipady=10)
@@ -162,18 +205,17 @@ def Save_As():
         messagebox.showinfo("INCOMPLETE ACTION", "File not saved!")
 
 
-
 ButtonClearOUT = Button(Frame4, text="CLEAR", relief=RIDGE, bd=5, command=Clear_OUT)
 ButtonClearOUT.grid(row=0, column=0, ipadx=30, ipady=10)
 
-LabelSpace3 = Label(Frame4, text=" ")
-LabelSpace3.grid(row=0,column=1)
+LabelSpaceF4R0C1 = Label(Frame4, text=" ")
+LabelSpaceF4R0C1.grid(row=0,column=1)
 
 ButtonCopyOUT = Button(Frame4, text="COPY", relief=RIDGE, bd=5, command=Copy_OUT)
 ButtonCopyOUT.grid(row=0, column=2, ipadx=30, ipady=10)
 
-LabelSpace4 = Label(Frame4, text=" ")
-LabelSpace4.grid(row=0,column=3)
+LabelSpaceF4R0C3 = Label(Frame4, text=" ")
+LabelSpaceF4R0C3.grid(row=0,column=3)
 
 ButtonSaveAs = Button(Frame4, text="SAVE", relief=RIDGE, bd=5, command=Save_As)
 ButtonSaveAs.grid(row=0, column=4, ipadx=30, ipady=10)
