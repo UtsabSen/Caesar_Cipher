@@ -3,6 +3,7 @@ from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import Combobox
 import os
+
 try:
     import pyperclip
     from nltk.tokenize import TweetTokenizer
@@ -13,10 +14,15 @@ except:
     except:
         messagebox.showinfo("INTERNET UNAVAILABLE","Please connect to internet and try again")
         exit(1)
-file = open("words.txt")
-my_dict = list(file.read().lower().split('\n'))
 end_of_line = "\n________________________________________________________________________________________________\n"
-file.close()
+bf = 0
+try:
+    file = open("words.txt")
+    my_dict = list(file.read().lower().split('\n'))
+    file.close()
+except:
+    bf = 1
+
 
 root = Tk()
 root.title("CAESAR CIPHER")
@@ -229,6 +235,9 @@ LabelSpaceF4R0C3.grid(row=0,column=3)
 ButtonSaveAs = Button(Frame4, text="SAVE", relief=RIDGE, bd=5, command=Save_As)
 ButtonSaveAs.grid(row=0, column=4, ipadx=30, ipady=10)
 
+if(bf):
+    messagebox.showinfo("FILE MISSING", "words.txt file is missing! Brute force will not work.")
+    ButtonBruteForce.config(state = DISABLED)
 
 Frame4.pack()
 
