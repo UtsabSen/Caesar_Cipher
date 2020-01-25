@@ -2,8 +2,17 @@ from tkinter import *
 from tkinter import messagebox
 from tkinter import filedialog
 from tkinter.ttk import Combobox
-import pyperclip
-from nltk.tokenize import TweetTokenizer
+import os
+try:
+    import pyperclip
+    from nltk.tokenize import TweetTokenizer
+except:
+    try:
+        os.system("pip install pyperclip")
+        os.system("pip install nltk")
+    except:
+        messagebox.showinfo("INTERNET UNAVAILABLE","Please connect to internet and try again")
+        exit(1)
 file = open("words.txt")
 my_dict = list(file.read().lower().split('\n'))
 end_of_line = "\n________________________________________________________________________________________________\n"
